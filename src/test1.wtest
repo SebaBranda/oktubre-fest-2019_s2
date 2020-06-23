@@ -1,0 +1,74 @@
+import cervezas.*
+import Personas.*
+import Nacionalidades.*
+import carpas.*
+
+test "Requerimientos" {
+
+	const hofbrau = new Rubia(lupulos = 3, paisDeOrigen = alemania, graduacion = 0.08)
+	const jarraHofbrau = new Jarra(capacidad = 0.5, marca = hofbrau) 
+	assert.equals(0.04, jarraHofbrau.cantidadDeAlcohol())
+	
+	const leopoldoIII = new Belga (peso = 85, nivelDeAguante = 10, esTradicional = true)
+	leopoldoIII.comprarJarra(jarraHofbrau)
+	leopoldoIII.comprarJarra(jarraHofbrau)
+	assert.equals(0.08, leopoldoIII.totalAlcoholConsumido())
+	assert.notThat(leopoldoIII.estaEbrio()) 
+	leopoldoIII.comprarJarra(jarraHofbrau) 
+	leopoldoIII.comprarJarra(jarraHofbrau)
+	assert.that(leopoldoIII.estaEbrio())
+	assert.equals(0.16, leopoldoIII.totalAlcoholConsumido())	 
+		
+	const munchausen = new Belga(peso = 65, nivelDeAguante = 18, esTradicional = true)
+	const vonBismark = new Checo(peso = 72, nivelDeAguante = 22)
+	const adolfo = new Aleman(peso = 105, nivelDeAguante = 30, esTradicional = true)
+	const rommel = new Aleman(peso = 105, nivelDeAguante = 30, esTradicional = true)
+	assert.notThat(munchausen.leGusta(hofbrau))
+	assert.notThat(vonBismark.leGusta(hofbrau))
+	assert.that(adolfo.leGusta(hofbrau))
+
+// Requerimientos 2da parte.
+	
+	//5
+	const zeppelin = new Rubia(lupulos = 6, paisDeOrigen = alemania, graduacion = 0.08)
+	const carpiten = new Carpa(marca = zeppelin, capacidadPublica = 2, bandaMusical = true)
+	assert.that(leopoldoIII.quieroEntrarAUnaCarpa(carpiten))
+	assert.that(munchausen.quieroEntrarAUnaCarpa(carpiten))
+	assert.notThat(vonBismark.quieroEntrarAUnaCarpa(carpiten))
+	assert.that(adolfo.quieroEntrarAUnaCarpa(carpiten))
+	//6
+	carpiten.capacidadPublica(10)
+	assert.that(carpiten.permitirIngreso(vonBismark))
+	//7
+	assert.that(munchausen.puedeEntrarA(carpiten))
+	assert.that(adolfo.puedeEntrarA(carpiten))
+	//8
+	carpiten.ingresarACarpa(adolfo)
+	//9
+	carpiten.venderJarra(adolfo, 1)
+	//carpito.venderJarra(munchausen, 1)//test de error, descomentar para probar.
+	//10
+	carpiten.ingresarACarpa(munchausen)
+	carpiten.ingresarACarpa(rommel)
+	leopoldoIII.reponerse()//era lanzar, pero me parecía muy violento profe, ademas no lo dejaban entrar porque estaba re loco.
+	assert.equals(0.08, leopoldoIII.totalAlcoholConsumido())
+	carpiten.ingresarACarpa(leopoldoIII)
+	carpiten.venderJarra(adolfo, 1)
+	carpiten.venderJarra(adolfo, 1)
+	carpiten.venderJarra(leopoldoIII, 1)
+	carpiten.venderJarra(leopoldoIII, 1)
+	carpiten.venderJarra(leopoldoIII, 1)
+	carpiten.venderJarra(munchausen, 1)
+	carpiten.venderJarra(munchausen, 1)
+	carpiten.venderJarra(munchausen, 1)
+	carpiten.venderJarra(munchausen, 1)
+	carpiten.venderJarra(rommel, 1)
+	carpiten.venderJarra(rommel, 1)
+	assert.equals(2,carpiten.ebriosEmpedernidos())
+	//11
+	assert.that(adolfo.esPatriota())
+	assert.that(rommel.esPatriota())
+	assert.notThat(munchausen.esPatriota())
+	assert.notThat(leopoldoIII.esPatriota())
+		
+}
